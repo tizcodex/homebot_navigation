@@ -1,0 +1,9 @@
+image: /home/tiz/homebot_workspace/src/homebot_navigation/maps/my_home_edited.pgm
+resolution: 0.050000
+# origin: [-13.800000, -12.200000, 3.14159]
+#origin: [-27.2, -24.0, 0.0]
+origin: [-12.3, -9.1, 0.0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+
