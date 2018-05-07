@@ -1,10 +1,15 @@
 # homebot_navigation
 Adding basic functionality to my home robot (Turtlebot 2, with Astra RGB-D camera)
 
-Current functionality:
+Functionality:
 
-Currently there is a basic launch file (with some custom turtlebot parameters), which starts up the turtlebot and performs 3 goals. 
-This script will soon be updated to be a turtlebot/map calibration script.
+HOMEBOT_NAVIGATION:
+Script robot_controller: Starts up the turtlebot and performs 3 goals. <br /> 
+Script calibrate_robot: Turns the robot, about 360 degrees.
+
+SIMULATION:
+Scripts: HOMEBOT_NAVIGATION (The scripts I plan to test will all be made in the HOMEBOT_NAVIGATION package) <br /> 
+Launch home_single_robot.launch: This is the main launcher for the simulation. It loads the world and turtlebot but there are base_link problems.
 
 Planned functionality:
 
@@ -13,6 +18,4 @@ Robot speech - Basic feedback from the robot to tell the user where it thinks it
 User speech - Allow a set of basic commands to be sent to the robot. Currently I plan to add just "Where are u?" and "Go to..."
 commands.
 
-*Improve map:
-
-Could use hector_mapping in combination with robot_pose_ekf to generate better and cleaner maps.
+*Future improvements: Could use hector_mapping in combination with robot_pose_ekf to generate better and cleaner maps.
