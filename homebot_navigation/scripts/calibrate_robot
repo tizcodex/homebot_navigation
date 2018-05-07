@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+
+'''
+
+Please note: some of this code reuses ideas courtesy of Mark Silliman
+Link: https://github.com/markwsilliman/turtlebot/blob/master/
+However, it has been repurposed in which case please acknowledge Mark Silliman and Tsvetan Zhivkov if you plan to reuse any of this work.
+
+Copyright (c) 2018, Tsvetan Zhivkov
+
+All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+'''
+
+# Ignore some of these libraries, they will be used later
+import rospy
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import actionlib
+from actionlib_msgs.msg import *
+from geometry_msgs.msg import Twist #Pose, Point, Quaternion
+from math import radians
+
+class Calibrate_Spin():
+    def __init__(self):
+        # initiliaze
+        rospy.init_node('CalibrateSpin', anonymous=False)
+        
+        # print to user how to stop execution
+        rospy.loginfo("To stop CTRL + C")
+        
+        # Create a publisher which can "talk" to TurtleBot and tell it to move
+        self.cmd_vel = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
+     
+        # Rate at which msgs are published
+        self.rate = rospy.Rate(5)
+        
+        
+    def spin(self):
+        # Call when ctrl + c is hit  
+        rospy.on_shutdown(self.shutdown)
+        # Twist is a datatype for velocity
+        turn_cmd = Twist()
+        # go forward 0 m/s
+        turn_cmd.linear.x = 0
+        # turn 45 degrees, converted to rads (67 degrees in my case gave the "best" 45 deg angle)
+        turn_cmd.angular.z = radians(67)
+        count = 0
+        # if not ctrl + c keeping going...
+        while not rospy.is_shutdown():
+            rospy.loginfo("Turning")
+            for i in range(0,10):
+                self.cmd_vel.publish(turn_cmd) 
+                # wait for 0.2 seconds (5 HZ) and publish again
+                self.rate.sleep()
+            count = count + 1
+            if (count == 4):
+                rospy.loginfo("I have rotated 360 degrees. Going back to IDLE")
+                rospy.loginfo("Now what?")
+                return
+                        
+    def shutdown(self):
+        # stop turtlebot
+        rospy.loginfo("Stoping TurtleBot")
+	    # default Twist msg has linear.x of 0 and angular.z of 0
+        self.cmd_vel.publish(Twist())
+	    # sleep just makes sure TurtleBot receives the stop command prior to shutting down the script
+        rospy.sleep(1)
+ 
+if __name__ == '__main__':
+    try:
+        Calibrate_Spin().spin()
+        #Robot_controller.spin()
+    except:
+        rospy.loginfo("CalibrateSpin node terminated.")
+

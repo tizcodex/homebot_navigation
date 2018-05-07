@@ -52,7 +52,7 @@
     <!-- <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/> -->
     <include file="$(find homebot_navigation)/launch/include/move_base.launch.xml"/>
     
-    <node name="homebot_navigation" pkg="homebot_navigation" type="robot_controller" output="screen">
+    <node name="homebot_navigation" pkg="homebot_navigation" type="calibrate_robot" output="screen">
     </node>
     
   <!--
