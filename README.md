@@ -1,4 +1,7 @@
-# homebot_navigation
+# Status
+This project is on hold for now..
+
+# Homebot_navigation
 Adding basic functionality to my home robot (Turtlebot 2, with Astra RGB-D camera)
 
 Functionality:
